@@ -12,13 +12,18 @@ router.post('/create', function(req, res, next){
         res.status(400).send('Need to provide an email.')
     }
     if(!req.body.password){
-        res.status(400).send('Need to privide a password.')
+        res.status(400).send('Need to provide a password.')
+    }
+
+    if(!req.body.confirm_password){
+        res.status(400).send('Need to provide a confirm_password')
+    }
+
+    if(req.body.password != req.body.confirm_password){
+        res.status(400).send('Passwords do not match!')
     }
     models.User.create({email: req.body.email}).then(function(user, created){
-        console.log('req.body.email', req.body.email)
-        console.log('CREATED', created)
-        console.log(user)
-        res.send('Created user')
+        res.status(201).send('Created user')
     })
 });
 
