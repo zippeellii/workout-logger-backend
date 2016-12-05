@@ -1,6 +1,6 @@
 "use strict";
 
-var bcrypt = require('bcrypt-nodejs')
+var passwordHash = require('password-hash')
 
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
@@ -11,12 +11,20 @@ module.exports = function(sequelize, DataTypes) {
     password: {
         type: DataTypes.STRING,
     }
+  },
+  {
+      instanceMethods: {
+        validPassword: function(password){
+            return passwordHash.verify(password, this.password)
+        }
+      }
   });
 
-  User.beforeCreate(function(user, options) {
-    var hash = bcrypt.hashSync(user.password, null, null)
+    User.beforeCreate(function(user, options) {
+        console.log(user.password)
+        var hash = passwordHash.generate(user.password)
         user.password = hash;
-})
+    })
 
   return User;
 };
