@@ -14,7 +14,7 @@ router.post('/create', function(req, res, next){
     if(!req.body.password){
         res.status(400).send('Need to privide a password.')
     }
-    models.User.create({email: req.body.email}).success(function(user, created){
+    models.User.create({email: req.body.email}).then(function(user, created){
         console.log('req.body.email', req.body.email)
         console.log('CREATED', created)
         console.log(user)
